@@ -34,7 +34,7 @@ public class Appcontext {
 	        sessionFactory.setDataSource(dataSource());
 	        
 	        sessionFactory.setPackagesToScan(new String[] {
-	            "com.webapp.model"
+	            "springsecurity.security"
 	        });
 	        
 	        sessionFactory.setHibernateProperties(hibernateProperties());

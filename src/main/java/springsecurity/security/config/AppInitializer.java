@@ -8,16 +8,17 @@ AbstractAnnotationConfigDispatcherServletInitializer{
 	@Override
     protected Class <?> [] getRootConfigClasses() {
         return new Class[] {
-           WebSecurityConfig.class
+        		MvcConfiguration.class
         };
-        //return null;
+//        return null;
     }
 
     @Override
     protected Class < ? > [] getServletConfigClasses() {
-        return new Class[] {
-            MvcConfiguration.class
-        };
+//        return new Class[] {
+//            MvcConfiguration.class
+//        };
+   	return null;
     }
 
     @Override
