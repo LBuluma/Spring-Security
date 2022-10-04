@@ -1,5 +1,9 @@
 package springsecurity.security.config;
 
+
+
+import javax.sql.DataSource;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -9,7 +13,6 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -18,13 +21,14 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
 @Configuration
 @EnableWebSecurity
 
 public class WebSecurityConfig  {  
 	
+	@Autowired
+	private DataSource dataSource;
 	
       
 /*
@@ -34,14 +38,30 @@ public class WebSecurityConfig  {
     @Autowired
     public void configureGlobal(AuthenticationManagerBuilder auth) 
       throws Exception {
-    	auth.inMemoryAuthentication()
-        .withUser("admin")
-        .password(passwordEncoder().encode("admin123"))
-        .roles("ADMIN")
-        .and()
-        .withUser("user")
-        .password(passwordEncoder().encode("user123"))
-        .roles("USER");
+    	/*
+    	 * IN memory authentication
+    	 */
+//    	auth.inMemoryAuthentication()
+//        .withUser("admin")
+//        .password(passwordEncoder().encode("admin123"))
+//        .roles("ADMIN")
+//        .and()
+//        .withUser("user")
+//        .password(passwordEncoder().encode("user123"))
+//        .roles("USER");
+    	
+    	
+    	/* 
+    	 * Database authentication
+    	 */
+    	auth.jdbcAuthentication()
+        .dataSource(dataSource)
+        .withDefaultSchema()
+        .withUser(User.withUsername("user")
+          .password(passwordEncoder().encode("pass"))
+          .roles("USER"));
+    	
+    	
     }
 
     /*
@@ -53,28 +73,19 @@ public class WebSecurityConfig  {
 	}
 	
 	
-//	/*
-//	 * Configure access using roles
-//	 */
-//	protected void configure(HttpSecurity http) throws Exception {
-//		http.httpBasic()
-//          .and()
-//          .authorizeRequests()
-//          .antMatchers("/admin").access("hasRole('ADMIN')")
-//          .antMatchers("/user").access("hasRole('USER')")
-//          .and()
-//          .formLogin();
-//		   
-//	   
-////	}
 
+      /*
+       * 
+       * 
+       * configure authorization of home page using user roles 
+       */
 	 @Bean
 	    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 	
 		http
 		.authorizeRequests()
-		   .antMatchers("/", "/login").permitAll()
-		   .antMatchers("/home").access("hasRole('USER')")
+		   .antMatchers("/", "/login").permitAll() // permit all the requests for the two links
+		   .antMatchers("/home").access("hasRole('USER')")//allow users with this role to access /home
 		   .antMatchers("/home").access("hasRole('ADMIN')")
 		   .anyRequest().authenticated()
 			.and()
