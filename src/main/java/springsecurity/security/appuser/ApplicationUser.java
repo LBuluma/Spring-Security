@@ -1,27 +1,12 @@
 package springsecurity.security.appuser;
 
 import java.io.Serializable;
-import java.util.Collection;
-import java.util.Collections;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinTable;
 import javax.persistence.Table;
-
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
-
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 
 
@@ -49,7 +34,7 @@ public class ApplicationUser implements Serializable{
     private String password;
 
 	@Column(name = "role_id ")
-    private String roleId;
+    private int roleId;
     
     @Column(name = "locked")
     private String locked;
@@ -104,11 +89,11 @@ public class ApplicationUser implements Serializable{
 		this.password = password;
 	}
 
-	public String getRoleId() {
+	public int getRoleId() {
 		return roleId;
 	}
 
-	public void setRoleId(String roleId) {
+	public void setRoleId(int roleId) {
 		this.roleId = roleId;
 	}
 

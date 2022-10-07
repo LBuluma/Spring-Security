@@ -7,5 +7,8 @@ public interface AppUserService {
 	
 	//Get application user using the user email.
 	public  ApplicationUser getUser(String email);
+	
+	//Get application user using the user email.
+		public  void saveAppUser(ApplicationUser appUser);
 
 }

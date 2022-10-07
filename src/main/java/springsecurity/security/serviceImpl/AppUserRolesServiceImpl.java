@@ -1,4 +1,6 @@
 package springsecurity.security.serviceImpl;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import springsecurity.security.appuser.AppUserRole;
@@ -16,6 +18,12 @@ public class AppUserRolesServiceImpl implements AppUserRolesService{
 	@Override
 	public AppUserRole getUserRole(int roleId) {
 		return userRolesDao.getUserRole(roleId);
+	}
+
+	@Override
+	public List<AppUserRole> getUserRoleByName(int roleId) {
+		return userRolesDao.getUserRoleByName(roleId);
+
 	}
 
 	
